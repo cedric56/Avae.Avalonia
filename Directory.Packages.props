@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <AvaloniaVersion>12.1.2</AvaloniaVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Avalonia" Version="$(AvaloniaVersion)" />
+    <PackageVersion Include="Avae.Services" Version="1.0.0-preview.1" />
+    <PackageVersion Include="Avae.ViewModels" Version="1.0.0-preview.1" />
+    <PackageVersion Include="MessageBox.Avalonia" Version="12.0.0" />
+    <PackageVersion Include="FluentAvaloniaUI" Version="3.1.0" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <!--<TreatWarningsAsErrors>true</TreatWarningsAsErrors>-->
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IsAotCompatible>true</IsAotCompatible>
+    <Version>1.0.0-preview.1</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avae.Services" />
+    <PackageReference Include="Avae.ViewModels" />
+    <PackageReference Include="FluentAvaloniaUI" />
+    <PackageReference Include="MessageBox.Avalonia" />
+  </ItemGroup>
+
+
+</Project>
