@@ -8,7 +8,13 @@ public class ViewFor<TViewModel> : UserControl, IViewFor
 {
     public object? Context
     {
-        get => Dispatcher.Invoke(() => DataContext);
-        set => Dispatcher.Invoke(() => DataContext = value);
+        get => DataContext;
+        set
+        {
+            if (Dispatcher.CheckAccess())
+                DataContext = value;
+            else
+                Dispatcher.Invoke(() => DataContext = value);
+        }
     }
 }
