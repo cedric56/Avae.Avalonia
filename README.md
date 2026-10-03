@@ -149,10 +149,6 @@ dotnet build Avae.Avalonia.slnx
 
 There are currently no test projects in the repository, so behavioral regressions should be covered with tests as the library evolves.
 
-## Known issues
-
-See the repository's GitHub issues for the current bug audit. In particular, the active top-level tracking and double-click command behavior need attention before relying on them in multi-window applications.
-
 ## License
 
 No license file is currently present in the repository. Add an explicit license before distributing the project as a reusable package.
