@@ -2,6 +2,8 @@
 using Avalonia.Controls.Notifications;
 using Avalonia.Controls.Primitives;
 using Avalonia.Threading;
+using FluentAvalonia.UI.Controls;
+using FluentAvalonia.UI.Windowing;
 
 namespace Avae.Avalonia;
 
@@ -20,7 +22,7 @@ internal class NotificationService : Avae.Services.INotificationService
             return;
 
         // Always check and update manager
-        if (_manager == null || TopLevel.GetTopLevel(_manager) != topLevel)
+        if (_manager == null || (TopLevel.GetTopLevel(_manager) != topLevel && topLevel is not FAAppWindow))
         {
             _manager?.TemplateApplied -= Ready;
             _manager = new WindowNotificationManager(topLevel);
