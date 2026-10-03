@@ -1,3 +1,7 @@
+> [!CAUTION]
+> **`Avae.Avalonia` is not ready for production.**
+>
+
 # Avae.Avalonia
 
 A small Avalonia UI support library for applications built around the Avae services and view-model packages.
