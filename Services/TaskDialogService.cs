@@ -13,47 +13,40 @@ public class TaskDialogService : ITaskDialogService
         {
             return await Dispatcher.UIThread.Invoke(async () =>
             {
-                try
+                TypedEventHandler<FATaskDialog, EventArgs>? opening = null;
+                TypedEventHandler<FATaskDialog, EventArgs>? opened = null;
+                TypedEventHandler<FATaskDialog, FATaskDialogClosingEventArgs>? closing = null;
+                TypedEventHandler<FATaskDialog, EventArgs>? closed = null;
+
+                var taskDialog = new FATaskDialog()
                 {
-                    TypedEventHandler<FATaskDialog, EventArgs>? opening = null;
-                    TypedEventHandler<FATaskDialog, EventArgs>? opened = null;
-                    TypedEventHandler<FATaskDialog, FATaskDialogClosingEventArgs>? closing = null;
-                    TypedEventHandler<FATaskDialog, EventArgs>? closed = null;
+                    Buttons = CreateDialogButtons(results),
+                    Content = @params.Content,
+                    Title = @params.Title,
+                    Header = @params.Header,
+                    SubHeader = @params.SubHeader,
+                    IconSource = @params.IconSource as FAIconSource,
+                    ShowProgressBar = @params.ShowProgressBar,
+                    FooterVisibility = Enum.Parse<FATaskDialogFooterVisibility>(@params.FooterVisibility.ToString()),
+                    IsFooterExpanded = @params.IsFooterExpanded,
+                    Footer = @params.Footer,
+                    XamlRoot = TopLevelStateManager.Default.GetActive(throwOnNull: true)
+                };
 
-                    var taskDialog = new FATaskDialog()
-                    {
-                        Buttons = CreateDialogButtons(results),
-                        Content = @params.Content,
-                        Title = @params.Title,
-                        Header = @params.Header,
-                        SubHeader = @params.SubHeader,
-                        IconSource = @params.IconSource as FAIconSource,
-                        ShowProgressBar = @params.ShowProgressBar,
-                        FooterVisibility = Enum.Parse<FATaskDialogFooterVisibility>(@params.FooterVisibility.ToString()),
-                        IsFooterExpanded = @params.IsFooterExpanded,
-                        Footer = @params.Footer,
-                        XamlRoot = TopLevelStateManager.Default.GetActive(throwOnNull: true)
-                    };
-
-                    taskDialog.Opening += opening = (sender, args) => @params.Opening?.Invoke();
-                    taskDialog.Opened += opened = (sender, args) => @params.Opening?.Invoke();
-                    taskDialog.Closing += closing = (sender, args) => args.Cancel = @params.Closing?.Invoke() ?? false;
-                    taskDialog.Closed += closed = (sender, args) =>
-                    {
-                        @params.Closed?.Invoke();
-
-                        taskDialog.Opened -= opened;
-                        taskDialog.Opening -= opening;
-                        taskDialog.Closing -= closing;
-                        taskDialog.Closed -= closed;
-                    };
-                    var result = await taskDialog.ShowAsync();
-                    return (TaskDialogStandardResult)result;
-                }
-                catch
+                taskDialog.Opening += opening = (sender, args) => @params.Opening?.Invoke();
+                taskDialog.Opened += opened = (sender, args) => @params.Opening?.Invoke();
+                taskDialog.Closing += closing = (sender, args) => args.Cancel = @params.Closing?.Invoke() ?? false;
+                taskDialog.Closed += closed = (sender, args) =>
                 {
-                    return TaskDialogStandardResult.None;
-                }
+                    @params.Closed?.Invoke();
+
+                    taskDialog.Opened -= opened;
+                    taskDialog.Opening -= opening;
+                    taskDialog.Closing -= closing;
+                    taskDialog.Closed -= closed;
+                };
+                var result = await taskDialog.ShowAsync();
+                return (TaskDialogStandardResult)result;
             });
         }
 
