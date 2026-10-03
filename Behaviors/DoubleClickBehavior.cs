@@ -18,7 +18,7 @@ public class DoubleClickBehavior : AvaloniaObject
     /// </summary>
     /// <value>Provide an <see cref="ICommand"/> derived object or binding.</value>
     public static readonly AttachedProperty<ICommand?> CommandProperty = AvaloniaProperty.RegisterAttached<DoubleClickBehavior, Interactive, ICommand?>(
-        "Command", default, false, BindingMode.OneTime);
+        "Command", default, false, BindingMode.OneWay);
 
     /// <summary>
     /// Identifies the <seealso cref="CommandParameterProperty"/> avalonia attached property.
