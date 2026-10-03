@@ -96,25 +96,43 @@ class TopLevelStateManagerImplementation : ITopLevelStateManager
 
     public void OnActivated(TopLevel topLevel)
     {
-        if (_active == topLevel)
-            return;
+        if (_active == topLevel) return;
+
+        if (_active is not null)
+            _active.Closed -= OnActiveClosed;
 
         _active = topLevel;
+        _active.Closed += OnActiveClosed;
 
         ActiveChanged?.Invoke(topLevel, EventArgs.Empty);
+    }
+
+    private void OnActiveClosed(object? sender, EventArgs e)
+    {
+        if (sender is not TopLevel tl || tl != _active) return;
+
+        _active.Closed -= OnActiveClosed;
+        _active = null;
+
+        // Notify listeners that "active" changed (to null).
+        // If the interface contract requires a non-null TopLevel here,
+        // consider raising with the newly-resolved active instead.
+        ActiveChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public TopLevel? GetActive()
     {
         var lifetime = Application.Current?.ApplicationLifetime;
 
-        var active = lifetime switch
-        {
-            IClassicDesktopStyleApplicationLifetime desktop => _active ?? TopLevel.GetTopLevel(desktop.MainWindow),
-            ISingleViewApplicationLifetime singleView => _active ?? TopLevel.GetTopLevel(singleView.MainView),
-            _ => _active ?? TopLevel.GetTopLevel(null)
-        };
+        // Prefer the live _active only if it's still valid.
+        if (_active is { } a)
+            return a;
 
-        return active ?? TopLevel.GetTopLevel(null);
+        return lifetime switch
+        {
+            IClassicDesktopStyleApplicationLifetime desktop => TopLevel.GetTopLevel(desktop.MainWindow),
+            ISingleViewApplicationLifetime singleView => TopLevel.GetTopLevel(singleView.MainView),
+            _ => TopLevel.GetTopLevel(null)
+        };
     }
 }
