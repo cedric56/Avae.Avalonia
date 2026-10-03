@@ -34,7 +34,7 @@ public class TaskDialogService : ITaskDialogService
                 };
 
                 taskDialog.Opening += opening = (sender, args) => @params.Opening?.Invoke();
-                taskDialog.Opened += opened = (sender, args) => @params.Opening?.Invoke();
+                taskDialog.Opened += opened = (sender, args) => @params.Opened?.Invoke();
                 taskDialog.Closing += closing = (sender, args) => args.Cancel = @params.Closing?.Invoke() ?? false;
                 taskDialog.Closed += closed = (sender, args) =>
                 {
